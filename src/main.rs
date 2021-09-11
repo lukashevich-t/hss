@@ -9,7 +9,7 @@ use hss::{
 };
 use std::{error::Error, io::stdout};
 use tui::{backend::CrosstermBackend, Terminal};
-use hss::configs::Configs;
+use hss::configs::{Configs, read_host_names};
 
 fn main() -> DynResult {
     let mut terminal = initialize_terminal()?;
@@ -18,7 +18,7 @@ fn main() -> DynResult {
     for i in 1..40 {
         hosts.push(i.to_string());
     }
-    // let hosts: Vec<String> = ["1234", "5678"].map(|x | String::from(x)).to_vec();
+    hosts = read_host_names();
     let configs = Configs::default();
     let mut app = App::new(hosts, configs);
 
