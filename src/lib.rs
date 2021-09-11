@@ -7,7 +7,7 @@ use configs::Configs;
 use std::{error::Error, io::Stdout};
 use tui::{
     backend::CrosstermBackend,
-    style::{Modifier, Style},
+    style::{Style},
     Frame, Terminal,
 };
 

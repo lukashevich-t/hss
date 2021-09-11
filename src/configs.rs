@@ -1,6 +1,5 @@
 use crossterm::event::KeyCode;
 use tui::style::Color;
-use regex::Regex;
 use std::fs::File;
 use std::io::Read;
 
@@ -61,17 +60,9 @@ pub fn keycode_to_string(keycode: KeyCode) -> String {
         KeyCode::Null => "Null",
         KeyCode::Esc => "Esc",
     }
-    .to_string();
+        .to_string();
 
     stringified
-}
-
-fn extract_host_names(config_lines: Vec<String>) -> Vec<String> {
-    let separator = Regex::new(r"[ \t]+").unwrap();
-    let v= config_lines;
-    v.into_iter()
-        .map(|x| String::from(separator.split(&x).into_iter().collect::<Vec<&str>>()[1].trim()))
-        .collect::<Vec<String>>()
 }
 
 pub fn read_host_names() -> Vec<String> {
@@ -87,15 +78,15 @@ pub fn read_host_names() -> Vec<String> {
     let mut s = String::new();
     match file.read_to_string(&mut s) {
         Err(why) => panic!("couldn't read {}: {}", display, why),
-        Ok(_) => {},
+        Ok(_) => {}
     }
-    let configs = s.split(&['\n', '\r'][..])
-        .filter(|x| x.starts_with("Host "))
-        .map(|x| String::from(x))
-        .collect::<Vec<String>>();
-    if configs.len() == 0 {
-        println!("No configured hosts in {}", display);
-        std::process::exit(1);
+
+    let mut host_names: Vec<String> = Vec::new();
+    for line in s.split(&['\n', '\r'][..]) {
+        let split = line.trim().split_whitespace().collect::<Vec<&str>>();
+        if split.len() > 1 && split[0].to_lowercase() == "host" && split[1].trim().len() > 0 {
+            host_names.push(String::from(split[1].trim()));
+        }
     }
-    return extract_host_names(configs);
+    host_names
 }

@@ -1,6 +1,5 @@
-use crate::{actions, App, TerminalFrame};
+use crate::{actions, App};
 use crossterm::event::KeyCode;
-use tui::layout::Rect;
 
 /// Input events handler
 pub fn handle_events(app: &mut App, keycode: KeyCode) {
