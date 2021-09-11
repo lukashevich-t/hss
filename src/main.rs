@@ -5,7 +5,7 @@ use crossterm::{
 };
 use hss::{
     events::{handle_events, handle_input_cursor},
-    file_handler::{load_configs, load_quests, save_quests},
+    file_handler::{load_configs},
     widget, App, CrossTerminal, DynResult, TerminalFrame,
 };
 use std::{error::Error, io::stdout};
@@ -14,13 +14,16 @@ use tui::{backend::CrosstermBackend, Terminal};
 fn main() -> DynResult {
     let mut terminal = initialize_terminal()?;
 
-    let quests = load_quests()?;
+    let mut hosts = Vec::<String>::new();
+    for i in 1..40 {
+        hosts.push(i.to_string());
+    }
+    // let hosts: Vec<String> = ["1234", "5678"].map(|x | String::from(x)).to_vec();
     let configs = load_configs()?;
-    let mut app = App::new(&quests, configs);
+    let mut app = App::new(hosts, configs);
 
     draw_ui(&mut terminal, &mut app)?;
     cleanup_terminal(terminal)?;
-    save_quests(&app.quests)?;
 
     Ok(())
 }

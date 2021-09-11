@@ -6,7 +6,7 @@ use tui::{
     text::{Span, Spans, Text},
     widgets::{Block, BorderType, Borders, List, ListItem, Paragraph},
 };
-use crate::{configs::keycode_to_string, App, Quest};
+use crate::{configs::keycode_to_string, App};
 use crossterm::event::KeyCode;
 
 /// Split terminal view
@@ -29,14 +29,14 @@ pub fn main_chunks(area: Rect) -> Vec<Rect> {
 /// Shows a list of quests
 pub fn quest_list(app: &App) -> List {
     // Map quests to ListItem widget
-    let quests: Vec<ListItem> = app
-        .quests
+    let hosts: Vec<ListItem> = app
+        .hosts
         .iter()
         .enumerate()
         .map(|q| indexed_quest_item(app, q))
         .collect();
 
-    List::new(quests).style(app.default_style()).block(
+    List::new(hosts).style(app.default_style()).block(
         Block::default()
             .title("Quests")
             .borders(Borders::ALL)
@@ -46,38 +46,30 @@ pub fn quest_list(app: &App) -> List {
 }
 
 /// Check if a quest is selected then renders it properly
-fn indexed_quest_item<'a>(app: &'a App, (index, quest): (usize, &Quest)) -> ListItem<'a> {
-    if let Some(selected_index) = app.selected_quest {
+fn indexed_quest_item<'a>(app: &'a App, (index, quest): (usize, &String)) -> ListItem<'a> {
+    if let Some(selected_index) = app.selected_host {
         quest_item(
-            quest.title.clone(),
-            quest.completed,
+            quest.clone(),
             selected_index == index,
             app,
         )
     } else {
-        quest_item(quest.title.clone(), quest.completed, false, app)
+        quest_item(quest.clone(), false, app)
     }
 }
 
 /// Widget to show a single quest
-fn quest_item(title: String, completed: bool, selected: bool, app: &App) -> ListItem {
+fn quest_item(title: String, selected: bool, app: &App) -> ListItem {
     let style = if selected {
         app.selection_style()
     } else {
         app.default_style()
     };
 
-    let quest = if completed {
-        ListItem::new(Spans::from(vec![
-            Span::styled("✔  ", app.check_sign_style(selected)),
-            Span::styled(title, app.checked_quest_style(selected)),
-        ]))
-    } else {
-        ListItem::new(Spans::from(vec![
-            Span::styled("   ", style),
-            Span::styled(title, style),
-        ]))
-    };
+    let quest = ListItem::new(Spans::from(vec![
+        Span::styled("   ", style),
+        Span::styled(title, style),
+    ]));
 
     quest.style(style)
 }

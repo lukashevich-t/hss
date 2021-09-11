@@ -1,5 +1,5 @@
 use crate::configs::Configs;
-use crate::{DynResult, Quest, QuestList};
+use crate::{DynResult};
 use directories_next::ProjectDirs;
 use lazy_static::lazy_static;
 use std::{
@@ -27,27 +27,6 @@ lazy_static! {
             config_path,
         }
     };
-}
-
-/// Load all saved quests from file
-pub fn load_quests() -> Result<Vec<Quest>, io::Error> {
-    if !Path::new(PROJ_PATHS.data_path.as_path()).exists() {
-        fs::File::create(PROJ_PATHS.data_path.as_path())?;
-    }
-
-    let stringified_quests = fs::read_to_string(PROJ_PATHS.data_path.as_path())?;
-    let quest_list: QuestList = serde_json::from_str(&stringified_quests).unwrap_or_default();
-
-    Ok(quest_list.quests)
-}
-
-/// Save all quests to a file
-pub fn save_quests(quests: &[Quest]) -> DynResult {
-    let quests = &QuestList::new(quests);
-    let stringified_quests = serde_json::to_string(quests)?;
-    fs::write(PROJ_PATHS.data_path.as_path(), stringified_quests)?;
-
-    Ok(())
 }
 
 /// Load configs from the file and returns it, if there's no config set, returns default config

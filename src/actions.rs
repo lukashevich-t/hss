@@ -1,9 +1,9 @@
 //! Actions to do after a specific event occurs
 
-use crate::{App, Quest};
+use crate::{App};
 
 pub fn new_quest(app: &mut App) {
-    app.selected_quest = None;
+    app.selected_host = None;
 }
 
 pub fn exit_app(app: &mut App) {
@@ -11,41 +11,19 @@ pub fn exit_app(app: &mut App) {
 }
 
 pub fn list_up(app: &mut App) {
-    if let Some(index) = app.selected_quest {
+    if let Some(index) = app.selected_host {
         if index > 0 {
-            app.selected_quest = Some(index - 1);
+            app.selected_host = Some(index - 1);
         }
     }
 }
 
 pub fn list_down(app: &mut App) {
-    if let Some(index) = app.selected_quest {
-        if index < app.quests.len() - 1 {
-            app.selected_quest = Some(index + 1);
+    if let Some(index) = app.selected_host {
+        if index < app.hosts.len() - 1 {
+            app.selected_host = Some(index + 1);
         }
     }
-}
-
-pub fn check_and_uncheck_quest(app: &mut App) {
-    if let Some(index) = app.selected_quest {
-        app.quests[index].completed = !app.quests[index].completed;
-    }
-}
-
-pub fn delete_quest(app: &mut App) {
-    if let Some(index) = app.selected_quest {
-        app.quests.remove(index);
-        if app.quests.is_empty() {
-            app.selected_quest = None;
-        } else if app.selected_quest.unwrap() == app.quests.len() {
-            app.selected_quest = Some(app.quests.len() - 1);
-        }
-    }
-}
-
-pub fn save_quest(app: &mut App) {
-    let new_quest = Quest::new(app.input.drain(..).collect());
-    app.quests.push(new_quest);
 }
 
 pub fn input_add_char(app: &mut App, c: char) {

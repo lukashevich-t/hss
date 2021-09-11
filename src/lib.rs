@@ -5,7 +5,6 @@ pub mod file_handler;
 pub mod widget;
 
 use configs::Configs;
-use serde::{Deserialize, Serialize};
 use std::{error::Error, io::Stdout};
 use tui::{
     backend::CrosstermBackend,
@@ -17,55 +16,25 @@ pub type DynResult = Result<(), Box<dyn Error>>;
 pub type CrossTerminal = Terminal<CrosstermBackend<Stdout>>;
 pub type TerminalFrame<'a> = Frame<'a, CrosstermBackend<Stdout>>;
 
-/// Represent a task
-#[derive(Serialize, Deserialize, Clone)]
-pub struct Quest {
-    pub title: String,
-    pub completed: bool,
-}
-
-impl Quest {
-    pub fn new(title: String) -> Self {
-        Self {
-            title,
-            completed: false,
-        }
-    }
-}
-
-/// Represent a list of tasks
-#[derive(Serialize, Deserialize, Default)]
-pub struct QuestList {
-    pub quests: Vec<Quest>,
-}
-
-impl QuestList {
-    pub fn new(quests: &[Quest]) -> Self {
-        Self {
-            quests: quests.to_vec(),
-        }
-    }
-}
-
 /// Application state
 pub struct App {
     /// New quest input value
     pub input: String,
-    /// List of all quests
-    pub quests: Vec<Quest>,
+    /// List of all ssh hosts
+    pub hosts: Vec<String>,
     /// Should be true when application wants to exit
     pub should_exit: bool,
-    /// Current selected quest
-    pub selected_quest: Option<usize>,
+    /// Current selected host
+    pub selected_host: Option<usize>,
     /// Application Configs
     pub configs: Configs,
 }
 
 impl App {
-    pub fn new(quests: &[Quest], configs: Configs) -> Self {
+    pub fn new(hosts: Vec<String>, configs: Configs) -> Self {
         Self {
-            quests: quests.to_vec(),
-            selected_quest: Some(0),
+            hosts,
+            selected_host: Some(0),
             input: String::new(),
             should_exit: false,
             configs,
