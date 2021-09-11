@@ -27,6 +27,8 @@ pub struct App {
     pub selected_host: Option<usize>,
     /// Application Configs
     pub configs: Configs,
+    /// SSH host to connect to after exit
+    pub host_to_connect: Option<String>,
 }
 
 impl App {
@@ -37,6 +39,7 @@ impl App {
             filter: String::new(),
             should_exit: false,
             configs,
+            host_to_connect: None
         }
     }
 
@@ -50,21 +53,5 @@ impl App {
         self.default_style()
             .fg(self.configs.colors.selection_fg)
             .bg(self.configs.colors.selection_bg)
-    }
-
-    pub fn check_sign_style(&self, selected: bool) -> Style {
-        if selected {
-            self.selection_style().fg(self.configs.colors.check_sign)
-        } else {
-            self.default_style().fg(self.configs.colors.check_sign)
-        }
-    }
-
-    pub fn checked_quest_style(&self, selected: bool) -> Style {
-        if selected {
-            self.selection_style().add_modifier(Modifier::CROSSED_OUT)
-        } else {
-            self.default_style().add_modifier(Modifier::CROSSED_OUT)
-        }
     }
 }

@@ -10,21 +10,25 @@ use hss::{
 use std::{error::Error, io::stdout};
 use tui::{backend::CrosstermBackend, Terminal};
 use hss::configs::{Configs, read_host_names};
+use std::process::Command;
 
 fn main() -> DynResult {
     let mut terminal = initialize_terminal()?;
 
-    let mut hosts = Vec::<String>::new();
-    for i in 1..40 {
-        hosts.push(i.to_string());
-    }
-    hosts = read_host_names();
+    // let hosts= (1..41).map(|x|  x.to_string()).collect();
+    let hosts = read_host_names();
     let configs = Configs::default();
     let mut app = App::new(hosts, configs);
 
     draw_ui(&mut terminal, &mut app)?;
     cleanup_terminal(terminal)?;
-
+    if let Some(host) = app.host_to_connect {
+        let mut cmd = Command::new("ssh.exe");
+        cmd.arg(host);
+        match cmd.status() {
+            _ => {}
+        }
+    }
     Ok(())
 }
 
@@ -48,7 +52,7 @@ fn draw_ui(terminal: &mut CrossTerminal, app: &mut App) -> DynResult {
         })?;
 
         if let Event::Key(event) = read()? {
-            handle_events(event, app);
+            handle_events(app, event.code);
         }
     }
 
@@ -67,8 +71,8 @@ fn cleanup_terminal(mut terminal: CrossTerminal) -> DynResult {
 fn app_view(frame: &mut TerminalFrame, app: &App) {
     let main_chunks = widget::main_chunks(frame.size());
 
-    let quest_list = widget::quest_list(app);
-    frame.render_widget(quest_list, main_chunks[0]);
+    let host_list = widget::host_list(app);
+    frame.render_widget(host_list, main_chunks[0]);
 
     let quest_input = widget::filter_input(app);
     frame.render_widget(quest_input, main_chunks[1]);

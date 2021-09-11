@@ -26,9 +26,9 @@ pub fn main_chunks(area: Rect) -> Vec<Rect> {
     chunks
 }
 
-/// Shows a list of quests
-pub fn quest_list(app: &App) -> List {
-    // Map quests to ListItem widget
+/// Shows a list of hosts
+pub fn host_list(app: &App) -> List {
+    // Map hosts to ListItem widget
     let hosts: Vec<ListItem> = app
         .hosts
         .iter()
@@ -38,7 +38,7 @@ pub fn quest_list(app: &App) -> List {
 
     List::new(hosts).style(app.default_style()).block(
         Block::default()
-            .title("Quests")
+            .title("SSH hosts")
             .borders(Borders::ALL)
             .border_type(BorderType::Rounded)
             .style(app.default_style()),

@@ -1,22 +1,17 @@
 use crate::{actions, App, TerminalFrame};
-use crossterm::event::{KeyCode, KeyEvent};
+use crossterm::event::KeyCode;
 use tui::layout::Rect;
 
 /// Input events handler
-pub fn handle_events(event: KeyEvent, app: &mut App) {
-    handle_normal_events(app, event.code);
-}
-
-/// When user is viewing quests
-fn handle_normal_events(app: &mut App, keycode: KeyCode) {
-    // let keybindings = &app.configs.keybindings;
-
-    if keycode == KeyCode::Esc {
-        actions::exit_app(app);
-    } else if keycode == KeyCode::Up {
-        actions::list_up(app);
-    } else if keycode == KeyCode::Down {
-        actions::list_down(app);
+pub fn handle_events(app: &mut App, keycode: KeyCode) {
+    match keycode {
+        KeyCode::Esc => actions::exit_app(app),
+        KeyCode::Up => actions::list_up(app),
+        KeyCode::Down => actions::list_down(app),
+        KeyCode::Char(c) => actions::filter_add_char(app, c),
+        KeyCode::Backspace => actions::filter_del_char(app),
+        KeyCode::Enter => actions::run_ssh_session(app),
+        _ => {}
     }
 }
 
