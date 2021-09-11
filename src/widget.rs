@@ -45,40 +45,40 @@ pub fn quest_list(app: &App) -> List {
     )
 }
 
-/// Check if a quest is selected then renders it properly
-fn indexed_quest_item<'a>(app: &'a App, (index, quest): (usize, &String)) -> ListItem<'a> {
+/// Check if host is selected then renders it properly
+fn indexed_quest_item<'a>(app: &'a App, (index, host_name): (usize, &String)) -> ListItem<'a> {
     if let Some(selected_index) = app.selected_host {
-        quest_item(
-            quest.clone(),
+        host_item(
+            host_name.clone(),
             selected_index == index,
             app,
         )
     } else {
-        quest_item(quest.clone(), false, app)
+        host_item(host_name.clone(), false, app)
     }
 }
 
-/// Widget to show a single quest
-fn quest_item(title: String, selected: bool, app: &App) -> ListItem {
+/// Widget to show a single host
+fn host_item(title: String, selected: bool, app: &App) -> ListItem {
     let style = if selected {
         app.selection_style()
     } else {
         app.default_style()
     };
 
-    let quest = ListItem::new(Spans::from(vec![
+    let host = ListItem::new(Spans::from(vec![
         Span::styled("   ", style),
         Span::styled(title, style),
     ]));
 
-    quest.style(style)
+    host.style(style)
 }
 
-/// Input field to make a new quest
-pub fn quest_input(app: &App) -> Paragraph {
+/// Input field for filter
+pub fn filter_input(app: &App) -> Paragraph {
     let style = app.default_style();
 
-    let input = Paragraph::new(app.input.as_ref()).style(style).block(
+    let input = Paragraph::new(app.filter.as_ref()).style(style).block(
         Block::default()
             .borders(Borders::ALL)
             .title("Filter")
@@ -91,8 +91,6 @@ pub fn quest_input(app: &App) -> Paragraph {
 
 /// Help text
 pub fn navigation_hint(app: &App) -> Paragraph {
-    // let keybindings = &app.configs.keybindings;
-
     let msg = vec![
         Span::styled(
             keycode_to_string(KeyCode::Esc),
@@ -106,9 +104,11 @@ pub fn navigation_hint(app: &App) -> Paragraph {
         Span::styled(" run config | ", app.default_style()),
         Span::styled(
             format!(
-                "{}/{}",
+                "{}/{}/{}/{}",
                 keycode_to_string(KeyCode::Up),
-                keycode_to_string(KeyCode::Down)
+                keycode_to_string(KeyCode::Down),
+                keycode_to_string(KeyCode::PageUp),
+                keycode_to_string(KeyCode::PageDown),
             ),
             app.default_style().add_modifier(Modifier::BOLD),
         ),

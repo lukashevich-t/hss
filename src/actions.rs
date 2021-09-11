@@ -26,10 +26,10 @@ pub fn list_down(app: &mut App) {
     }
 }
 
-pub fn input_add_char(app: &mut App, c: char) {
-    app.input.push(c);
+pub fn filter_add_char(app: &mut App, c: char) {
+    app.filter.push(c);
 }
 
-pub fn input_del_char(app: &mut App) {
-    app.input.pop();
+pub fn filter_del_char(app: &mut App) {
+    app.filter.pop();
 }

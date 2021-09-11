@@ -5,11 +5,11 @@ use crossterm::{
 };
 use hss::{
     events::{handle_events, handle_input_cursor},
-    file_handler::{load_configs},
     widget, App, CrossTerminal, DynResult, TerminalFrame,
 };
 use std::{error::Error, io::stdout};
 use tui::{backend::CrosstermBackend, Terminal};
+use hss::configs::Configs;
 
 fn main() -> DynResult {
     let mut terminal = initialize_terminal()?;
@@ -19,7 +19,7 @@ fn main() -> DynResult {
         hosts.push(i.to_string());
     }
     // let hosts: Vec<String> = ["1234", "5678"].map(|x | String::from(x)).to_vec();
-    let configs = load_configs()?;
+    let configs = Configs::default();
     let mut app = App::new(hosts, configs);
 
     draw_ui(&mut terminal, &mut app)?;
@@ -70,7 +70,7 @@ fn app_view(frame: &mut TerminalFrame, app: &App) {
     let quest_list = widget::quest_list(app);
     frame.render_widget(quest_list, main_chunks[0]);
 
-    let quest_input = widget::quest_input(app);
+    let quest_input = widget::filter_input(app);
     frame.render_widget(quest_input, main_chunks[1]);
     handle_input_cursor(&app, frame, &main_chunks);
 

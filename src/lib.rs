@@ -1,7 +1,6 @@
 pub mod actions;
 pub mod configs;
 pub mod events;
-pub mod file_handler;
 pub mod widget;
 
 use configs::Configs;
@@ -18,8 +17,8 @@ pub type TerminalFrame<'a> = Frame<'a, CrosstermBackend<Stdout>>;
 
 /// Application state
 pub struct App {
-    /// New quest input value
-    pub input: String,
+    /// filter string
+    pub filter: String,
     /// List of all ssh hosts
     pub hosts: Vec<String>,
     /// Should be true when application wants to exit
@@ -35,7 +34,7 @@ impl App {
         Self {
             hosts,
             selected_host: Some(0),
-            input: String::new(),
+            filter: String::new(),
             should_exit: false,
             configs,
         }
