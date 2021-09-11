@@ -96,12 +96,12 @@ pub fn navigation_hint(app: &App) -> Paragraph {
             keycode_to_string(KeyCode::Esc),
             app.default_style().add_modifier(Modifier::BOLD),
         ),
-        Span::styled(" exit | ", app.default_style()),
+        Span::styled(": exit | ", app.default_style()),
         Span::styled(
             keycode_to_string(KeyCode::Enter),
             app.default_style().add_modifier(Modifier::BOLD),
         ),
-        Span::styled(" run config | ", app.default_style()),
+        Span::styled(": run config | ", app.default_style()),
         Span::styled(
             format!(
                 "{}/{}/{}/{}",
@@ -112,7 +112,7 @@ pub fn navigation_hint(app: &App) -> Paragraph {
             ),
             app.default_style().add_modifier(Modifier::BOLD),
         ),
-        Span::styled(" navigate list", app.default_style()),
+        Span::styled(": navigate list", app.default_style()),
     ];
     let style = app.default_style();
 
