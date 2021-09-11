@@ -29,11 +29,13 @@ pub fn main_chunks(area: Rect) -> Vec<Rect> {
 /// Shows a list of hosts
 pub fn host_list(app: &App) -> List {
     // Map hosts to ListItem widget
+    let filter_string = app.filter.trim();
     let hosts: Vec<ListItem> = app
         .hosts
         .iter()
+        .filter(|x| x.contains(filter_string))
         .enumerate()
-        .map(|q| indexed_quest_item(app, q))
+        .map(|q| indexed_host_item(app, q))
         .collect();
 
     List::new(hosts).style(app.default_style()).block(
@@ -46,7 +48,7 @@ pub fn host_list(app: &App) -> List {
 }
 
 /// Check if host is selected then renders it properly
-fn indexed_quest_item<'a>(app: &'a App, (index, host_name): (usize, &String)) -> ListItem<'a> {
+fn indexed_host_item<'a>(app: &'a App, (index, host_name): (usize, &String)) -> ListItem<'a> {
     if let Some(selected_index) = app.selected_host {
         host_item(
             host_name.clone(),
@@ -78,7 +80,7 @@ fn host_item(title: String, selected: bool, app: &App) -> ListItem {
 pub fn filter_input(app: &App) -> Paragraph {
     let style = app.default_style();
 
-    let input = Paragraph::new(app.filter.as_ref()).style(style).block(
+    let filter = Paragraph::new(app.filter.as_ref()).style(style).block(
         Block::default()
             .borders(Borders::ALL)
             .title("Filter")
@@ -86,7 +88,7 @@ pub fn filter_input(app: &App) -> Paragraph {
             .style(style),
     );
 
-    input
+    filter
 }
 
 /// Help text
@@ -112,7 +114,7 @@ pub fn navigation_hint(app: &App) -> Paragraph {
             ),
             app.default_style().add_modifier(Modifier::BOLD),
         ),
-        Span::styled(": navigate list", app.default_style()),
+        Span::styled(": navigate", app.default_style()),
     ];
     let style = app.default_style();
 

@@ -4,7 +4,7 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use hss::{
-    events::{handle_events, handle_input_cursor},
+    events::{handle_events},
     widget, App, CrossTerminal, DynResult, TerminalFrame,
 };
 use std::{error::Error, io::stdout};
@@ -74,9 +74,8 @@ fn app_view(frame: &mut TerminalFrame, app: &App) {
     let host_list = widget::host_list(app);
     frame.render_widget(host_list, main_chunks[0]);
 
-    let quest_input = widget::filter_input(app);
-    frame.render_widget(quest_input, main_chunks[1]);
-    handle_input_cursor(&app, frame, &main_chunks);
+    let filter_input = widget::filter_input(app);
+    frame.render_widget(filter_input, main_chunks[1]);
 
     let navigation_hint = widget::navigation_hint(app);
     frame.render_widget(navigation_hint, main_chunks[2]);
