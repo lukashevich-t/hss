@@ -19,8 +19,10 @@ pub type TerminalFrame<'a> = Frame<'a, CrosstermBackend<Stdout>>;
 pub struct App {
     /// filter string
     pub filter: String,
-    /// List of all ssh hosts
+    /// All ssh hosts
     pub hosts: Vec<String>,
+    /// Filtered ssh hosts
+    pub filtered_hosts: Vec<String>,
     /// Should be true when application wants to exit
     pub should_exit: bool,
     /// Current selected host
@@ -33,8 +35,10 @@ pub struct App {
 
 impl App {
     pub fn new(hosts: Vec<String>, configs: Configs) -> Self {
+        let filtered_hosts = hosts.clone();
         Self {
             hosts,
+            filtered_hosts,
             selected_host: Some(0),
             filter: String::new(),
             should_exit: false,

@@ -29,11 +29,9 @@ pub fn main_chunks(area: Rect) -> Vec<Rect> {
 /// Shows a list of hosts
 pub fn host_list(app: &App) -> List {
     // Map hosts to ListItem widget
-    let filter_string = app.filter.trim();
     let hosts: Vec<ListItem> = app
-        .hosts
+        .filtered_hosts
         .iter()
-        .filter(|x| x.contains(filter_string))
         .enumerate()
         .map(|q| indexed_host_item(app, q))
         .collect();
