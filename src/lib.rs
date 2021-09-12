@@ -31,6 +31,8 @@ pub struct App {
     pub configs: Configs,
     /// SSH host to connect to after exit
     pub host_to_connect: Option<String>,
+    /// Index of first visible ssh host
+    pub first_visible_host_index: usize,
 }
 
 impl App {
@@ -43,7 +45,8 @@ impl App {
             filter: String::new(),
             should_exit: false,
             configs,
-            host_to_connect: None
+            host_to_connect: None,
+            first_visible_host_index: 0,
         }
     }
 

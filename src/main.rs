@@ -68,11 +68,15 @@ fn cleanup_terminal(mut terminal: CrossTerminal) -> DynResult {
 }
 
 /// A single frame of application view
-fn app_view(frame: &mut TerminalFrame, app: &App) {
+fn app_view(frame: &mut TerminalFrame, app: &mut App) {
     let main_chunks = widget::main_chunks(frame.size());
 
-    let host_list = widget::host_list(app);
-    frame.render_widget(host_list, main_chunks[0]);
+    let host_list_area = main_chunks[0];
+    // let host_list = widget::host_list(app, &host_list_area);
+    // frame.render_widget(host_list, host_list_area);
+
+    let host_list = widget::host_list(app, host_list_area.height);
+    frame.render_widget(host_list, host_list_area);
 
     let filter_input = widget::filter_input(app);
     frame.render_widget(filter_input, main_chunks[1]);

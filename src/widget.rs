@@ -27,14 +27,32 @@ pub fn main_chunks(area: Rect) -> Vec<Rect> {
 }
 
 /// Shows a list of hosts
-pub fn host_list(app: &App) -> List {
+pub fn host_list(app: &mut App, height: u16) -> List {
+    let height = (height - 2) as usize;
+    app.first_visible_host_index = if let Some(selected_index) = app.selected_host {
+        if selected_index < app.first_visible_host_index {
+            selected_index
+        } else if selected_index >= app.first_visible_host_index + height {
+            selected_index.saturating_sub(height - 1)
+        } else {
+            app.first_visible_host_index
+        }
+    } else {
+        0
+    };
+
+    let mut hosts = Vec::new();
+    for q in app.filtered_hosts.iter().enumerate().skip(app.first_visible_host_index) {
+        hosts.push(indexed_host_item(app, q))
+    };
     // Map hosts to ListItem widget
-    let hosts: Vec<ListItem> = app
-        .filtered_hosts
-        .iter()
-        .enumerate()
-        .map(|q| indexed_host_item(app, q))
-        .collect();
+    // app
+    //     .filtered_hosts
+    //     .iter()
+    //     .enumerate()
+    //     // .skip(app.first_visible_host)
+    //     .map(|q| indexed_host_item(app, q))
+    //     .collect();
 
     List::new(hosts).style(app.default_style()).block(
         Block::default()
