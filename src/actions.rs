@@ -27,15 +27,16 @@ pub fn list_home(app: &mut App) {
 }
 
 pub fn list_pgup(app: &mut App) {
-    // app.selected_host = if app.filtered_hosts.len() > 0 { Some(0) } else { None };
+    if app.filtered_hosts.len() == 0 { return; };
+    let selected_host_index = if let Some(i) = app.selected_host { i } else { 0 };
+    app.selected_host = Some( selected_host_index.saturating_sub(app.host_list_client_height as usize));
 }
 
 pub fn list_pgdn(app: &mut App) {
-    print!("{}", app.host_list_client_height);
     let host_count = app.filtered_hosts.len();
     if host_count == 0 { return; };
     let selected_host_index = if let Some(i) = app.selected_host { i } else { 0 };
-    app.selected_host = Some(min(host_count, selected_host_index + app.host_list_client_height as usize) - 1);
+    app.selected_host = Some(min(host_count - 1, selected_host_index + app.host_list_client_height as usize));
 }
 
 pub fn list_end(app: &mut App) {

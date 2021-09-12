@@ -15,8 +15,8 @@ use std::process::Command;
 fn main() -> DynResult {
     let mut terminal = initialize_terminal()?;
 
-    let hosts= (1..41).map(|x|  x.to_string()).collect();
-    // let hosts = read_host_names();
+    // let hosts= (1..41).map(|x|  x.to_string()).collect();
+    let hosts = read_host_names();
     let configs = Configs::default();
     let mut app = App::new(hosts, configs);
 
