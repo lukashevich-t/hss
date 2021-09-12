@@ -33,6 +33,8 @@ pub struct App {
     pub host_to_connect: Option<String>,
     /// Index of first visible ssh host
     pub first_visible_host_index: usize,
+    /// Количество строк в фрейме для отображения списка хостов ssh
+    pub host_list_client_height: u16
 }
 
 impl App {
@@ -47,6 +49,7 @@ impl App {
             configs,
             host_to_connect: None,
             first_visible_host_index: 0,
+            host_list_client_height: 0,
         }
     }
 

@@ -27,8 +27,8 @@ pub fn main_chunks(area: Rect) -> Vec<Rect> {
 }
 
 /// Shows a list of hosts
-pub fn host_list(app: &mut App, height: u16) -> List {
-    let height = (height - 2) as usize;
+pub fn host_list(app: &mut App) -> List {
+    let height = app.host_list_client_height  as usize;
     app.first_visible_host_index = if let Some(selected_index) = app.selected_host {
         if selected_index < app.first_visible_host_index {
             selected_index
@@ -122,11 +122,13 @@ pub fn navigation_hint(app: &App) -> Paragraph {
         Span::styled(": run config | ", app.default_style()),
         Span::styled(
             format!(
-                "{}/{}/{}/{}",
+                "{}/{}/{}/{}/{}/{}",
                 keycode_to_string(KeyCode::Up),
                 keycode_to_string(KeyCode::Down),
                 keycode_to_string(KeyCode::PageUp),
                 keycode_to_string(KeyCode::PageDown),
+                keycode_to_string(KeyCode::Home),
+                keycode_to_string(KeyCode::End),
             ),
             app.default_style().add_modifier(Modifier::BOLD),
         ),

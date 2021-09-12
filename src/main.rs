@@ -15,8 +15,8 @@ use std::process::Command;
 fn main() -> DynResult {
     let mut terminal = initialize_terminal()?;
 
-    // let hosts= (1..41).map(|x|  x.to_string()).collect();
-    let hosts = read_host_names();
+    let hosts= (1..41).map(|x|  x.to_string()).collect();
+    // let hosts = read_host_names();
     let configs = Configs::default();
     let mut app = App::new(hosts, configs);
 
@@ -72,10 +72,8 @@ fn app_view(frame: &mut TerminalFrame, app: &mut App) {
     let main_chunks = widget::main_chunks(frame.size());
 
     let host_list_area = main_chunks[0];
-    // let host_list = widget::host_list(app, &host_list_area);
-    // frame.render_widget(host_list, host_list_area);
-
-    let host_list = widget::host_list(app, host_list_area.height);
+    app.host_list_client_height = host_list_area.height - 2;
+    let host_list = widget::host_list(app);
     frame.render_widget(host_list, host_list_area);
 
     let filter_input = widget::filter_input(app);
