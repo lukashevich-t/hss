@@ -23,7 +23,7 @@ fn main() -> DynResult {
     draw_ui(&mut terminal, &mut app)?;
     cleanup_terminal(terminal)?;
     if let Some(host) = app.host_to_connect {
-        let mut cmd = Command::new("ssh.exe");
+        let mut cmd = Command::new("ssh");
         cmd.arg(host);
         match cmd.status() {
             _ => {}

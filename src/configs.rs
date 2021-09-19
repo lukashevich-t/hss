@@ -84,8 +84,12 @@ pub fn read_host_names() -> Vec<String> {
     let mut host_names: Vec<String> = Vec::new();
     for line in s.split(&['\n', '\r'][..]) {
         let split = line.trim().split_whitespace().collect::<Vec<&str>>();
-        if split.len() > 1 && split[0].to_lowercase() == "host" && split[1].trim().len() > 0 {
-            host_names.push(String::from(split[1].trim()));
+        if split.len() < 2 {
+            continue;
+        }
+        let host_name = split[1].trim();
+        if split[0].to_lowercase() == "host" && host_name.len() > 0 && host_name != "*" {
+            host_names.push(String::from(host_name));
         }
     }
     host_names
